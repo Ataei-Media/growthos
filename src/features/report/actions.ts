@@ -53,7 +53,8 @@ export async function startReportWithContext(
       mainGoal: input.mainGoal,
       biggestChallenge: input.biggestChallenge,
     });
-  } catch {
+  } catch (error) {
+    console.error("[startReport] createReport failed:", error);
     return { error: "We couldn't start the analysis. Please try again." };
   }
 

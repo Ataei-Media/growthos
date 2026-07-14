@@ -35,9 +35,9 @@ const serverSchema = z.object({
     .string({ error: "OPENAI_MODEL is required. Set it to your OpenAI model id (see SETUP.md)." })
     .min(1, "OPENAI_MODEL must not be empty. Set it to your OpenAI model id (see SETUP.md)."),
 
-  // Resend
+  // Resend — "from" may be a bare address or "Name <email>" display format.
   RESEND_API_KEY: z.string().min(1),
-  RESEND_FROM_EMAIL: z.string().email().default("GrowthOS <noreply@growthos.app>"),
+  RESEND_FROM_EMAIL: z.string().min(1).default("GrowthOS <noreply@growthos.app>"),
 
   // Firecrawl (website crawling)
   FIRECRAWL_API_KEY: z.string().min(1),
