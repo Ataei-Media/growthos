@@ -2,7 +2,6 @@ import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { computeCostMicros } from "@/config/ai-pricing";
-import { clientEnv } from "@/lib/env";
 import type { ReportContext, RevenueReport } from "./types";
 
 export interface ReportRecord {
@@ -77,22 +76,7 @@ export async function createReport(url: string, context?: ReportContext): Promis
     })
     .select("id")
     .single();
-  if (error || !data) {
-    // TEMP diagnostic: probe the Supabase host directly to surface the real cause.
-    let probe = "";
-    try {
-      const res = await fetch(`${clientEnv.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/health`);
-      probe = `probe_status=${res.status}`;
-    } catch (e) {
-      const cause = (e as { cause?: { code?: string; message?: string } }).cause;
-      probe = `probe_err=${(e as Error).message}; code=${cause?.code ?? ""}; causeMsg=${
-        cause?.message ?? ""
-      }`;
-    }
-    throw new Error(
-      `${error?.message ?? "no data"} | url=[${clientEnv.NEXT_PUBLIC_SUPABASE_URL}] | ${probe}`,
-    );
-  }
+  if (error || !data) throw new Error(error?.message ?? "Failed to create report.");
   return data.id;
 }
 
