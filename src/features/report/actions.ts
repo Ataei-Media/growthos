@@ -55,7 +55,8 @@ export async function startReportWithContext(
     });
   } catch (error) {
     console.error("[startReport] createReport failed:", error);
-    return { error: "We couldn't start the analysis. Please try again." };
+    // TEMP diagnostic: surface the real reason to the UI while wiring up prod.
+    return { error: `DEBUG: ${error instanceof Error ? error.message : String(error)}` };
   }
 
   redirect(`/report/${id}`);
