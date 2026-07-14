@@ -17,7 +17,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   if (!record) return NextResponse.redirect(`${base}/`);
   if (record.paid) return NextResponse.redirect(`${base}/report/${id}`);
   if (!isStripeConfigured()) {
-    return NextResponse.redirect(`${base}/report/${id}?error=payments_unavailable`);
+    return NextResponse.redirect(`${base}/report/${id}?error=not_configured`);
   }
 
   try {
@@ -48,6 +48,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   } catch (error) {
     // Almost always an invalid STRIPE_SECRET_KEY. Fail gracefully, don't 500.
     console.error("[checkout] Stripe session create failed:", error);
-    return NextResponse.redirect(`${base}/report/${id}?error=payments_unavailable`);
+    const msg = error instanceof Error ? error.message : String(error);
+    return NextResponse.redirect(
+      `${base}/report/${id}?error=${encodeURIComponent(msg.slice(0, 180))}`,
+    );
   }
 }
