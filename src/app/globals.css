@@ -1,0 +1,191 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+/* Dark mode is class-driven (toggled by next-themes) rather than media-only. */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * GrowthOS design tokens.
+ * Brand palette:
+ *   background #FFFFFF · primary #111111 · accent #2563EB
+ *   success #22C55E · warning #F59E0B · error #EF4444 · cards #F8FAFC
+ */
+:root {
+  --radius: 0.75rem;
+
+  --background: #ffffff;
+  --foreground: #111111;
+
+  --card: #f8fafc;
+  --card-foreground: #111111;
+
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+
+  --primary: #111111;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f1f5f9;
+  --secondary-foreground: #111111;
+
+  --muted: #f8fafc;
+  --muted-foreground: #64748b;
+
+  --accent: #2563eb;
+  --accent-foreground: #ffffff;
+
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+
+  --warning: #f59e0b;
+  --warning-foreground: #111111;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+
+  /* Chart palette for dashboards / reports. */
+  --chart-1: #2563eb;
+  --chart-2: #22c55e;
+  --chart-3: #f59e0b;
+  --chart-4: #8b5cf6;
+  --chart-5: #ef4444;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+
+  --card: #111214;
+  --card-foreground: #fafafa;
+
+  --popover: #111214;
+  --popover-foreground: #fafafa;
+
+  --primary: #fafafa;
+  --primary-foreground: #0a0a0a;
+
+  --secondary: #1c1e22;
+  --secondary-foreground: #fafafa;
+
+  --muted: #17181b;
+  --muted-foreground: #94a3b8;
+
+  --accent: #3b82f6;
+  --accent-foreground: #ffffff;
+
+  --success: #22c55e;
+  --success-foreground: #052e16;
+
+  --warning: #f59e0b;
+  --warning-foreground: #1c1917;
+
+  --destructive: #f87171;
+  --destructive-foreground: #1a0505;
+
+  --border: #26282d;
+  --input: #26282d;
+  --ring: #3b82f6;
+
+  --chart-1: #3b82f6;
+  --chart-2: #22c55e;
+  --chart-3: #f59e0b;
+  --chart-4: #a78bfa;
+  --chart-5: #f87171;
+}
+
+/* Expose tokens to Tailwind's utility engine (v4 CSS-first config). */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+  }
+
+  /* Consistent focus ring across the app. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* Subtle glass surface used on premium marketing/dashboard panels. */
+  .glass {
+    background-color: color-mix(in srgb, var(--background) 70%, transparent);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+  }
+}
