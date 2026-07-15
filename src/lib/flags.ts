@@ -32,6 +32,7 @@ export const FEATURE_FLAGS = [
   "workspaceTeamChat",
 
   // Commercial / platform
+  "reportPaywall", // OFF: the report is a free lead magnet / agency weapon.
   "competitorMode",
   "marketingGenerator",
   "revenueForecasting",
@@ -65,6 +66,9 @@ const defaults: Record<FeatureFlag, boolean> = {
   workspaceDocuments: false,
   workspaceTeamChat: false,
 
+  // Merchants are the subject of the report, not the buyer. The report is free;
+  // we monetise the agencies who use it to win clients. Flip to true to re-gate.
+  reportPaywall: false,
   competitorMode: false,
   marketingGenerator: false,
   revenueForecasting: false,

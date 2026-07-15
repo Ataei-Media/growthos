@@ -6,6 +6,7 @@ import { AnalyzingReport } from "@/components/report/analyzing";
 import { sampleReport } from "@/features/report/sample";
 import { getReport, markReportPaid } from "@/features/report/service";
 import { getStripe, isStripeConfigured } from "@/lib/stripe/server";
+import { flags } from "@/lib/flags";
 import { sendPurchaseSequence } from "@/lib/email/resend";
 import { trackServer } from "@/lib/analytics/posthog";
 
@@ -86,10 +87,13 @@ export default async function ReportPage({
     );
   }
 
-  // Ethical urgency: unpaid previews really do expire after 24 hours.
+  // The report is free unless the paywall flag is explicitly enabled.
+  const unlocked = record.paid || !flags.reportPaywall;
+
+  // Ethical urgency only applies while a paywall exists.
   const PREVIEW_TTL_MS = 24 * 60 * 60 * 1000;
   const expired =
-    !record.paid && Date.now() - new Date(record.createdAt).getTime() > PREVIEW_TTL_MS;
+    !unlocked && Date.now() - new Date(record.createdAt).getTime() > PREVIEW_TTL_MS;
 
   if (expired) {
     return (
@@ -115,7 +119,7 @@ export default async function ReportPage({
     <ReportView
       report={record.report}
       reportId={id}
-      paid={record.paid}
+      paid={unlocked}
       createdAt={record.createdAt}
     />
   );

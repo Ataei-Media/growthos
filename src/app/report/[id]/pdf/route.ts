@@ -4,6 +4,7 @@ import { renderToBuffer, type DocumentProps } from "@react-pdf/renderer";
 import { ReportDocument } from "@/lib/pdf/report-document";
 import { sampleReport } from "@/features/report/sample";
 import { getReport } from "@/features/report/service";
+import { flags } from "@/lib/flags";
 import { trackServer } from "@/lib/analytics/posthog";
 import type { RevenueReport } from "@/features/report/types";
 
@@ -18,7 +19,9 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   } else {
     const record = await getReport(id);
     if (!record || !record.report) return new Response("Not found", { status: 404 });
-    if (!record.paid) return new Response("Payment required", { status: 402 });
+    if (!record.paid && flags.reportPaywall) {
+      return new Response("Payment required", { status: 402 });
+    }
     report = record.report;
     await trackServer("report_downloaded", id, {});
   }

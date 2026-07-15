@@ -92,7 +92,7 @@ export function UrlAnalyzerForm({
         </p>
       ) : null}
       <p className="mt-3 text-sm text-muted-foreground">
-        Free preview · Full report €29 · Results in under 2 minutes
+        Free · No account · Full report in under 2 minutes
       </p>
     </form>
   );
